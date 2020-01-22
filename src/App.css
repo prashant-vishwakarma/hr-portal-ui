@@ -1,0 +1,11 @@
+.App {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.app-content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}

@@ -1,0 +1,8 @@
+.navbar-container {
+    background-color: #282c34;
+    height: calc(100vh);
+    width: 200px;
+    position: relative;
+    top: 50px;
+    color: white;
+}
