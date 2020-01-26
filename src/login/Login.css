@@ -1,64 +1,89 @@
-.login-container {
-    text-align: center;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 2px #ccc;
-    width: 30vw;
-    position: relative;
-    top: 7vh;
-    left: 30vw;
-}
-
-.login-container-header {
-    margin-top: 50px;
-}
-
 .login-form {
-    margin-top: -100px;
-    width: 70%;
-    padding: 10%;
+    max-width: 300px;
 }
 
-.login-container-footer {
-    background-color: rgb(241, 241, 241);
+.login-form-forgot {
+    float: right;
+}
+
+.login-form-button {
     width: 100%;
 }
 
-.login-app-name {
-    margin-top: 20px;
+.login-warp {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 300px;
+    height: 300px;
+    border-radius: 3px;
 }
 
-.login-footer-text {
-    font-size: 12px;
-    padding: 0% 10%;
-}
 
-.login-container input {
-    margin-bottom: 20px;
-    box-shadow: 0 1px 0 0 #000;
-    border: 0px solid #ccc;
-    border-bottom: 1px solid #000;
-    height: 30px;
-    width: 100%;
-}
+/*.login-container {*/
+/*    text-align: center;*/
+/*    border: 1px solid #ccc;*/
+/*    box-shadow: 0 2px 2px #ccc;*/
+/*    width: 30vw;*/
+/*    position: relative;*/
+/*    top: 7vh;*/
+/*    left: 30vw;*/
+/*}*/
 
-.login-form button {
-    border-radius: 5px;
-    background-color: #0052cc;
-    color: white;
-    width: 100%;
-    padding: 5px 5px;
-    font-size: 18px;
-}
+/*.login-container-header {*/
+/*    margin-top: 50px;*/
+/*}*/
 
-button:hover {
-    background-color: #1da1f2;
-    cursor: pointer;
-}
+/*.login-form {*/
+/*    margin-top: -100px;*/
+/*    width: 70%;*/
+/*    padding: 10%;*/
+/*}*/
 
-.login-image {
-    height: 200px;
-}
+/*.login-container-footer {*/
+/*    background-color: rgb(241, 241, 241);*/
+/*    width: 100%;*/
+/*}*/
 
-.mediaocean-logo {
-    width: 150px;
-}
+/*.login-app-name {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.login-footer-text {*/
+/*    font-size: 12px;*/
+/*    padding: 0% 10%;*/
+/*}*/
+
+/*.login-container input {*/
+/*    margin-bottom: 20px;*/
+/*    box-shadow: 0 1px 0 0 #000;*/
+/*    border: 0px solid #ccc;*/
+/*    border-bottom: 1px solid #000;*/
+/*    height: 30px;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.login-form button {*/
+/*    border-radius: 5px;*/
+/*    background-color: #0052cc;*/
+/*    color: white;*/
+/*    width: 100%;*/
+/*    padding: 5px 5px;*/
+/*    font-size: 18px;*/
+/*}*/
+
+/*button:hover {*/
+/*    background-color: #1da1f2;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.login-image {*/
+/*    height: 200px;*/
+/*}*/
+
+/*.mediaocean-logo {*/
+/*    width: 150px;*/
+/*}*/

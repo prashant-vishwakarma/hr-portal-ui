@@ -14,7 +14,6 @@ function App() {
 
     useEffect(() => {
         chooseDisplayPage();
-
     }, [loginState]);
 
     const chooseDisplayPage = () => {
