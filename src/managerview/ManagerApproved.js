@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {Table} from 'antd';
-import {checkPermission, getResignationApprovedByMe,} from "../utils/APIUtils";
+import {checkPermission, getResignationApprovedByMe} from "../utils/APIUtils";
 
 const columns = [
     {

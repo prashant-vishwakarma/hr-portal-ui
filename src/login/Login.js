@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Checkbox, Col, Form, Icon, Input, Row} from 'antd';
+import {Button, Checkbox, Col, Form, Icon, Input, notification, Row} from 'antd';
 import './Login.css';
 import {login, openNotificationWithIcon} from '../utils/APIUtils';
 import {USER_DATA} from "../globalConstants";

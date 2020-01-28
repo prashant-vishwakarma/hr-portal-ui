@@ -4,13 +4,14 @@ import {Avatar, Button, Col, Icon, Layout, Menu, Row} from "antd";
 import UserInfo from "../employeeview/UserInfo";
 import ApplyResignation from "../employeeview/ApplyResignation";
 import ResignationStatus from "../employeeview/ResignationStatus";
-import ManagerPending from "../managerview/ManagerPending";
+import ManagerPending from '../managerview/ManagerPending';
 import ManagerApproved from "../managerview/ManagerApproved";
 import ManagerRejected from "../managerview/ManagerRejected";
 import PageNotFound from "../PageNotFound";
 import FeedbackForm from '../employeeview/FeedbackForm';
 import {ACCESS_TOKEN} from '../globalConstants';
 import {checkPermission, checkResigned} from "../utils/APIUtils";
+import logo from '../login/logo.svg';
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -42,10 +43,10 @@ export default class Dashboard extends React.Component {
                 <Layout style={{minHeight: '100vh'}}>
                     <Header>
                         <Row theme='dark' type="flex" justify="start">
-                            <Col align='left' span={8}><img src='mo_logo_white.png' height='50px' width="290"/></Col>
+                            <Col align='left' span={8}><img src={logo} height='100px'/></Col>
                             <Col span={4} offset={12}>
                                 <div>
-                                    <Avatar style={{backgroundColor: '#7265e6', verticalAlign: 'middle'}} size={60}>
+                                    <Avatar style={{backgroundColor: '#7265e6', verticalAlign: 'middle'}} size={50}>
                                         {this.state.user.name}
                                     </Avatar>
                                     <Button
@@ -70,11 +71,11 @@ export default class Dashboard extends React.Component {
                                     title={
                                         <span>
                                         <Icon type="user"/>
-                                        <span>My View ({this.state.user.name})</span>
+                                        <span>({this.state.user.name})</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="3"><Link to="/">My Info</Link></Menu.Item>
+                                    <Menu.Item key="3"><Link to="/">My Details</Link></Menu.Item>
                                     <Menu.Item key="4"><Link to="/applyResignation">Resignation</Link></Menu.Item>
                                     <Menu.Item key="5" disabled={!checkResigned(this.state.user)}><Link to="/resignationStatus">Resignation Status</Link></Menu.Item>
                                     <Menu.Item key="6" disabled={!checkResigned(this.state.user)}><Link to="/exitform">Exit Interview</Link></Menu.Item>

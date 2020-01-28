@@ -2,7 +2,7 @@ const globalConstants = {
     APP_NAME: 'Employee Exit Portal'
 }
 
-export const API_BASE_URL = 'http://10.14.5.108:8082';
+export const API_BASE_URL = 'http://10.14.5.108:8080';
 export const URI_SEPARATOR = '/';
 export const SIGNUP_URI = 'auth/signup';
 export const LOGIN_URI = 'api/auth/signin';
@@ -15,8 +15,8 @@ export const ACCESS_TOKEN = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNTczND
 
 
 //export const API_BASE_URL ='http://localhost:8080';
-export const API_RESIGN_URL ='http://localhost:8080/resign';
-export const API_RESIGN_STATUS_URL ='http://localhost:8080/resignstatus';
+export const API_RESIGN_URL = 'http://localhost:8080/resign';
+export const API_RESIGN_STATUS_URL = 'http://localhost:8080/resignstatus';
 export const API_EXIT_INTERVIEW_QUE_URL = 'http://localhost:8080/question';
 export const API_EXIT_INTERVIEW_SUBMIT_URL = 'http://localhost:8080/submitform';
 export const API_EXIT_INTERVIEW_ANSWER_URL = 'http://localhost:8080/getAnswer';

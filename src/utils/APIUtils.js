@@ -8,7 +8,7 @@ import {
     API_RESIGN_URL
 } from '../globalConstants';
 import {notification} from "antd";
-import _ from 'lodash'
+import _ from 'lodash';
 
 const request = (options) => {
     const headers = new Headers({
