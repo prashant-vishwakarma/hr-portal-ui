@@ -1,6 +1,6 @@
 import React from 'react';
 import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
-import {Avatar, Button, Col, Icon, Layout, Menu, Row} from "antd";
+import {Col, Dropdown, Icon, Layout, Menu, message, Row} from "antd";
 import UserInfo from "../employeeview/UserInfo";
 import ApplyResignation from "../employeeview/ApplyResignation";
 import ResignationStatus from "../employeeview/ResignationStatus";
@@ -15,6 +15,7 @@ import logo from '../login/logo.svg';
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
+
 
 export default class Dashboard extends React.Component {
 
@@ -37,6 +38,25 @@ export default class Dashboard extends React.Component {
         this.setState({collapsed});
     };
 
+    menu = (
+        <Menu onClick={this.handleMenuClick}>
+            <Menu.Item key="1" onClick={this.logout}>
+                <Icon type="poweroff"/>
+                Logout
+            </Menu.Item>
+        </Menu>
+    );
+
+    handleButtonClick = (e) => {
+        message.info('Click on left button.');
+        console.log('click left button', e);
+    }
+
+    handleMenuClick = (e) => {
+        message.info('Click on menu item.');
+        console.log('click', e);
+    }
+
     render() {
         return (
             <Router>
@@ -46,18 +66,14 @@ export default class Dashboard extends React.Component {
                             <Col align='left' span={8}><img src={logo} height='100px'/></Col>
                             <Col span={4} offset={12}>
                                 <div>
-                                    <Avatar style={{backgroundColor: '#7265e6', verticalAlign: 'middle'}} size={50}>
-                                        {this.state.user.name}
-                                    </Avatar>
-                                    <Button
-                                        type="primary"
-                                        icon="poweroff"
-                                        size='small'
-                                        style={{marginLeft: 16, verticalAlign: 'middle'}}
-                                        onClick={this.logout}
-                                    >
-                                        Logout
-                                    </Button>
+                                    <div id="components-dropdown-demo-dropdown-button">
+                                        <Dropdown.Button
+                                            overlay={this.menu}
+                                            icon={<Icon type="user"/>}
+                                            style={{marginLeft: 16, verticalAlign: 'middle'}}>
+                                            {this.state.user.name}
+                                        </Dropdown.Button>
+                                    </div>
                                 </div>
                             </Col>
                         </Row>
@@ -71,7 +87,7 @@ export default class Dashboard extends React.Component {
                                     title={
                                         <span>
                                         <Icon type="user"/>
-                                        <span>({this.state.user.name})</span>
+                                        <span>{this.state.user.name.split(' ')[0] + ' ' + this.state.user.name.split(' ')[1].charAt(0)}</span>
                                     </span>
                                     }
                                 >

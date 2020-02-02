@@ -1,8 +1,8 @@
 import React from 'react';
-import {Button, Checkbox, Col, Form, Icon, Input, notification, Row} from 'antd';
+import {Button, Checkbox, Col, Form, Icon, Input, Row} from 'antd';
 import './Login.css';
 import {login, openNotificationWithIcon} from '../utils/APIUtils';
-import {USER_DATA} from "../globalConstants";
+import {ACCESS_TOKEN, USER_DATA} from "../globalConstants";
 import logo from './logo.svg';
 
 export default class Login extends React.Component {
@@ -21,16 +21,16 @@ export default class Login extends React.Component {
                 requestBody.password = values.password;
                 login(requestBody)
                     .then(response => {
-                        //localStorage.setItem(ACCESS_TOKEN, response.accessToken);
                         if (response) {
-                            localStorage.setItem(USER_DATA, response);
+                            localStorage.setItem(ACCESS_TOKEN, response.token);
+                            localStorage.setItem(USER_DATA, JSON.stringify(response));
                             openNotificationWithIcon('success', 'Login successful', '');
                             let user = response.authentication.principal;
                             user.roles = response.roles;
                             callback(user);
                         }
                     }).catch(error => {
-                    openNotificationWithIcon('error', 'Login Failed : ', error);
+                    openNotificationWithIcon('error', 'Login Failed : ', error.message);
                 });
             }
         });
