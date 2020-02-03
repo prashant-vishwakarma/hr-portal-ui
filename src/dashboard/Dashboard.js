@@ -98,7 +98,7 @@ export default class Dashboard extends React.Component {
                                 </SubMenu>
                                 <SubMenu
                                     key="sub2"
-                                    disabled={!checkPermission(this.state.user, 'IN_MANAGER')}
+                                    hidden={!checkPermission(this.state.user, 'IN_MANAGER')}
                                     title={
                                         <span>
                                         <Icon type="team"/>
@@ -112,7 +112,7 @@ export default class Dashboard extends React.Component {
                                 </SubMenu>
                                 <SubMenu
                                     key="sub3"
-                                    disabled={!(checkPermission(this.state.user, 'IN_HR') ||
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
                                         checkPermission(this.state.user, 'IN_ADMIN') ||
                                         checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
                                     }
@@ -133,7 +133,7 @@ export default class Dashboard extends React.Component {
                                 </Menu.Item>
                                 <SubMenu
                                     key="sub4"
-                                    disabled={!(checkPermission(this.state.user, 'IN_HR') ||
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
                                         checkPermission(this.state.user, 'IN_ADMIN') ||
                                         checkPermission(this.state.user, 'IN_FINANCE'))
                                     }

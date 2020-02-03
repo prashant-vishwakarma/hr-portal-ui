@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
-import { Table } from 'antd';
-import {getSubmittedResign, openNotificationWithIcon} from "../utils/APIUtils";
+import {Table} from 'antd';
+import {getResignationByUserId, openNotificationWithIcon} from "../utils/APIUtils";
 
 const columns = [
-    { title: 'Department', dataIndex: 'department', key: 'department' },
-    { title: 'Status', dataIndex: 'status', key: 'status' },
-    { title: 'Action By', dataIndex: 'actionBy', key: 'actionBy' },
+    {title: 'Department', dataIndex: 'department', key: 'department'},
+    {title: 'Status', dataIndex: 'status', key: 'status'},
+    {title: 'Action By', dataIndex: 'actionBy', key: 'actionBy'},
     {
         title: 'Send Reminder',
         dataIndex: '',
@@ -39,7 +39,7 @@ const data = [
 ];
 
 const ResignationStatus = (props) => {
-    let loginUser = props.user.user;
+    let loginUser = props.user;
     let manager = props.user.manager;
     const [loading, setLoading] = React.useState(false);
     const [resignStatus, setResignStatus] = React.useState({});
@@ -75,8 +75,8 @@ const ResignationStatus = (props) => {
         },
     ];
     useEffect(() => {
-        if(loginUser.status === 'FILED_RESIGNATION') {
-            getSubmittedResign(props.user.id).then(response => {
+        if (loginUser.status === 'SUBMITTED') {
+            getResignationByUserId(props.user.id).then(response => {
                 setSubmittedResign(response);
                 setResignStatus(response.resignationStatus);
             }).catch(error => {
@@ -89,7 +89,7 @@ const ResignationStatus = (props) => {
     return (
         <Table
             columns={columns}
-            expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
+            expandedRowRender={record => <p style={{margin: 0}}>{record.description}</p>}
             dataSource={data}
         />
     );

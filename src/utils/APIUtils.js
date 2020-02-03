@@ -2,9 +2,10 @@ import {
     ACCESS_TOKEN,
     API_BASE_URL,
     API_EXIT_INTERVIEW_ANSWER_URL,
-    API_EXIT_INTERVIEW_QUE_URL,
+    API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL,
     API_EXIT_INTERVIEW_SUBMIT_URL,
     API_GET_RESIGNATION_BY_USER_ID_URL,
+    API_LOGIN_URI,
     API_RESIGN_STATUS_URL,
     API_RESIGN_URL,
     API_URI_SEPARATOR,
@@ -39,7 +40,7 @@ const request = (options) => {
 
 export function login(loginRequest) {
     return request({
-        url: API_BASE_URL + "/auth/login",
+        url: API_LOGIN_URI,
         method: 'POST',
         body: JSON.stringify(loginRequest)
     });
@@ -66,6 +67,13 @@ export const withdrawResignationByResignationId = (resignationId) => {
         url: API_WITHDRAW_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
         method: 'PUT',
         body: JSON.stringify({status: 'APPROVED'})
+    });
+}
+
+export const getAllExitInterviewQuestions = () => {
+    return request({
+        url: API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL,
+        method: 'GET'
     });
 }
 
@@ -196,13 +204,13 @@ export function getResignationApprovedByMe(getRequest) {
     });
 }
 
-export function getQuestions() {
-    return request({
-        url: API_EXIT_INTERVIEW_QUE_URL,
-        method: 'GET'
-    });
-
-}
+// export function getQuestions() {
+//     return request({
+//         url: API_EXIT_INTERVIEW_QUE_URL,
+//         method: 'GET'
+//     });
+//
+// }
 
 export function sendAnswer(answerRequest) {
     return request({
