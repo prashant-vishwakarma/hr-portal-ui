@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {Button, Descriptions, Input, Popconfirm, Spin, Typography} from 'antd';
-import {getSubmittedResign, openNotificationWithIcon, submitResignation, updateStatus} from "../utils/APIUtils";
+import {getResignationByUserId, openNotificationWithIcon, submitResignation, withdrawResignationByResignationId} from "../utils/APIUtils";
+import moment from "moment";
 
 const {TextArea} = Input;
 const {Paragraph} = Typography;
@@ -9,11 +10,11 @@ const ApplyResignation = (props) => {
     let loginUser = props.user;
     let manager = props.user.manager;
     const [loading, setLoading] = React.useState(false);
-    const [resignComment, setResignComment] = React.useState("");
-    const [submittedResign, setSubmittedResign] = React.useState("");
+    const [resignComment, setResignComment] = React.useState('');
+    const [submittedResign, setSubmittedResign] = React.useState('');
     useEffect(() => {
-        getSubmittedResign(props.user.mail).then(response => {
-            if (response.resignation_id) {
+        getResignationByUserId(props.user.mail).then(response => {
+            if (response.resignationId) {
                 setSubmittedResign(response);
                 setResignComment(response.reason);
                 openNotificationWithIcon("info", 'Already Submitted Resignation', '');
@@ -24,9 +25,31 @@ const ApplyResignation = (props) => {
     }, []);
     const submitResign = () => {
         setLoading(true);
+        let date = moment();
+        let dateNow = date.toISOString();
+        let releaseDate = date.add(2, 'M').toISOString();
         const resignRequest = {
+            userId: props.user.mail,
             reason: resignComment,
-            user_id: props.user.mail,
+            applicationDate: dateNow,
+            releaseDate: releaseDate,
+            actualDate: releaseDate,
+            country: 'India',
+            isManagerApproved: false,
+            status: 'SUBMITTED',
+            userName: props.user.name,
+            managerName: props.user.manager.name,
+            userDepartment: props.user.department,
+            correspondenceUserDetailsRequest: {
+                userId: props.user.mail,
+                name: props.user.name,
+                address: 'Pune',
+                city: 'Pune',
+                state: 'Maharashtra',
+                pin: '411032',
+                email: props.user.mail,
+                contactNo: '7350834452'
+            }
         }
         submitResignation(resignRequest).then(response => {
             if (response) {
@@ -42,16 +65,12 @@ const ApplyResignation = (props) => {
 
         });
         console.log(resignRequest);
+        setLoading(false);
     };
     const withdrawResignation = () => {
         setLoading(true);
-        const resignRequest = {
-            user_id: props.user.mail,
-            reason: resignComment,
-            application_date: new Date(),
-            status: "WITHDRAW"
-        }
-        updateStatus(props.user.mail, submittedResign.resignation_id).then(response => {
+
+        withdrawResignationByResignationId(submittedResign.resignationId).then(response => {
             if (response) {
                 window.location = '/';
                 openNotificationWithIcon('success', 'Resignation WithDraw Successfully', '');
@@ -63,7 +82,6 @@ const ApplyResignation = (props) => {
             openNotificationWithIcon('error', 'Failed to Withdraw Resignation', '');
             setLoading(false);
         });
-        console.log(resignRequest);
     }
     return (
         <div>
@@ -75,7 +93,7 @@ const ApplyResignation = (props) => {
                     <Descriptions.Item label="Manager Name">{manager.name}</Descriptions.Item>
                     <Descriptions.Item label="Resignation Reason: " span={2}>
                         <TextArea
-                            placeholder="Rejection Comments"
+                            placeholder="Please Add Comments Regarding Request"
                             autoSize={{minRows: 3, maxRows: 5}}
                             onChange={e => setResignComment(e.target.value)}
                             value={resignComment}
@@ -100,10 +118,10 @@ const ApplyResignation = (props) => {
                         <Button className='resignation-btn' disabled={submittedResign} type="danger">Submit</Button>
                     </Popconfirm>
 
-                    <Button className='resignation-btn'>Cancel</Button>
-                    <Popconfirm placement="right" title='Are you sure to withdraw Resignation?'
-                                onConfirm={withdrawResignation} okText="Yes"
-                                cancelText="No">
+                    <Popconfirm placement="right" title='This will stop resignation Process'
+                                disabled={!submittedResign}
+                                onConfirm={withdrawResignation} okText="I Confirm"
+                                cancelText="Cancel">
 
                         <Button className='resignation-btn' disabled={!submittedResign}
                                 type="primary">Withdraw</Button>

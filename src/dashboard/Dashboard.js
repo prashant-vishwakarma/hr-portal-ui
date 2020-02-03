@@ -71,7 +71,7 @@ export default class Dashboard extends React.Component {
                                             overlay={this.menu}
                                             icon={<Icon type="user"/>}
                                             style={{marginLeft: 16, verticalAlign: 'middle'}}>
-                                            {this.state.user.name}
+                                            <div onClick={() => window.open("http://localhost:3000", "_self")}>{this.state.user.name}</div>
                                         </Dropdown.Button>
                                     </div>
                                 </div>
@@ -91,10 +91,10 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="3"><Link to="/">My Details</Link></Menu.Item>
-                                    <Menu.Item key="4"><Link to="/applyResignation">Resignation</Link></Menu.Item>
-                                    <Menu.Item key="5" disabled={!checkResigned(this.state.user)}><Link to="/resignationStatus">Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="6" disabled={!checkResigned(this.state.user)}><Link to="/exitform">Exit Interview</Link></Menu.Item>
+                                    <Menu.Item key="1"><Link to="/">My Details</Link></Menu.Item>
+                                    <Menu.Item key="2"><Link to="/applyResignation">Resignation</Link></Menu.Item>
+                                    <Menu.Item key="3" disabled={!checkResigned()}><Link to="/resignationStatus">Resignation Status</Link></Menu.Item>
+                                    <Menu.Item key="4" disabled={!checkResigned()}><Link to="/exitform">Exit Interview</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub2"
@@ -102,13 +102,13 @@ export default class Dashboard extends React.Component {
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>My Teams Resignation</span>
+                                        <span>My Team</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="7"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="8"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="9"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="5"><Link to="/awaitingMe">Pending Approval</Link></Menu.Item>
+                                    <Menu.Item key="6"><Link to="/approved">Approved Requests</Link></Menu.Item>
+                                    <Menu.Item key="7"><Link to="/rejected">Rejected Resignations</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub3"
@@ -123,11 +123,11 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="10"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="11"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="12"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="8"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="9"><Link to="/approved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="10"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
-                                <Menu.Item key="13">
+                                <Menu.Item key="11">
                                     <Icon type="file"/>
                                     <span>File</span>
                                 </Menu.Item>
@@ -144,9 +144,9 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="14"><Link> Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="15"><Link>Resignation Analysis</Link></Menu.Item>
-                                    <Menu.Item key="16"><Link>Release Experience Letter</Link></Menu.Item>
+                                    <Menu.Item key="12"><Link> Resignation Status</Link></Menu.Item>
+                                    <Menu.Item key="13"><Link>Resignation Analysis</Link></Menu.Item>
+                                    <Menu.Item key="14"><Link>Release Experience Letter</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Sider>

@@ -1,9 +1,11 @@
 import React from 'react';
 import {Button, Checkbox, Col, Form, Icon, Input, Row} from 'antd';
 import './Login.css';
-import {login, openNotificationWithIcon} from '../utils/APIUtils';
-import {ACCESS_TOKEN, USER_DATA} from "../globalConstants";
-import logo from './logo.svg';
+import {getResignationByUserId, login, openNotificationWithIcon} from '../utils/APIUtils';
+import {ACCESS_TOKEN, USER_DATA} from '../globalConstants';
+import logo from './mediaoceanLogo.svg';
+
+const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
 
 export default class Login extends React.Component {
     state = {
@@ -15,7 +17,7 @@ export default class Login extends React.Component {
 
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                //console.log('Received values of form: ', values);
                 let requestBody = {};
                 requestBody.username = values.username;
                 requestBody.password = values.password;
@@ -24,9 +26,22 @@ export default class Login extends React.Component {
                         if (response) {
                             localStorage.setItem(ACCESS_TOKEN, response.token);
                             localStorage.setItem(USER_DATA, JSON.stringify(response));
-                            openNotificationWithIcon('success', 'Login successful', '');
+                            openNotificationWithIcon('success', 'Login successful', '', 1.5);
                             let user = response.authentication.principal;
                             user.roles = response.roles;
+
+                            if (!user.mail) {
+                                user.mail = user.userPrincipalName;
+                            }
+
+                            getResignationByUserId(user.mail).then(response => {
+                                if (response.hasOwnProperty('resignationId')) {
+                                    localStorage.setItem('resignationForUser', JSON.stringify(response));
+                                } else {
+                                    openNotificationWithIcon('error', 'Could Not Fetch Status', 'Employee\'s Resignation Status Unknown');
+                                }
+                            });
+
                             callback(user);
                         }
                     }).catch(error => {
@@ -36,28 +51,27 @@ export default class Login extends React.Component {
         });
     };
 
+
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
             <div>
-                <Row>
-                    <Col span={8}></Col>
-                    <Col span={8}> <img src={logo} width='300px' height='100px'/></Col>
-                    <Col span={8}></Col>
-                </Row>
-                <Row type="flex" justify="center">
+                <Row type='flex' style={{height: '100vh'}} align='middle'>
                     <Col span={8}></Col>
                     <Col span={8}>
-                        <div className="">
-                            <Form onSubmit={this.handleSubmit} className="login-form"
-                                  label="Mediaocean Employee Resignation Portal">
+                        <Form onSubmit={this.handleSubmit} className='login-form'
+                              label='Mediaocean Employee Resignation Portal'>
+                            <Row type='flex' justify='center' style={{marginBottom: '20px'}}>
+                                <img src={logo} width='200px'/>
+                            </Row>
+                            <Row>
                                 <Form.Item>
                                     {getFieldDecorator('username', {
                                         rules: [{required: true, message: 'Please input your username!'}],
                                     })(
                                         <Input
-                                            prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                            placeholder="Username"
+                                            prefix={<Icon type='user' style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                            placeholder='Username'
                                         />,
                                     )}
                                 </Form.Item>
@@ -66,9 +80,9 @@ export default class Login extends React.Component {
                                         rules: [{required: true, message: 'Please input your Password!'}],
                                     })(
                                         <Input
-                                            prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                                            type="password"
-                                            placeholder="Password"
+                                            prefix={<Icon type='lock' style={{color: 'rgba(0,0,0,.25)'}}/>}
+                                            type='password'
+                                            placeholder='Password'
                                         />,
                                     )}
                                 </Form.Item>
@@ -77,16 +91,15 @@ export default class Login extends React.Component {
                                         valuePropName: 'checked',
                                         initialValue: true,
                                     })(<Checkbox>Remember me</Checkbox>)}
-                                    <a className="login-form-forgot" href="">
+                                    <a className='login-form-forgot' href=''>
                                         Forgot password
                                     </a>
-                                    <Button type="primary" htmlType="submit" className="login-form-button">
+                                    <Button type='primary' htmlType='submit' className='login-form-button'>
                                         Log in
                                     </Button>
-                                    {/* Or <a href="">register now!</a> */}
                                 </Form.Item>
-                            </Form>
-                        </div>
+                            </Row>
+                        </Form>
                     </Col>
                     <Col span={8}></Col>
                 </Row>
@@ -156,7 +169,7 @@ export default class Login extends React.Component {
 //                         <button onClick={formSubmitHandler} className='login-button'>Login</button>
 //                     </div>
 //                 </div>
-//                 <div className="login-container-footer">
+//                 <div className='login-container-footer'>
 //                     <div>
 //                         <div className='login-app-name'>Employee Portal App</div>
 //                     </div>
@@ -164,7 +177,7 @@ export default class Login extends React.Component {
 //                         Welcome to Employee Portal, Mediaocean. This portal simplifies the Exit Process of an Employee from
 //                         our Organisation for the HR's Perspective.
 //                     </div>
-//                     <img src={logo} alt='Mediaocean Logo' className="mediaocean-logo"></img>
+//                     <img src={logo} alt='Mediaocean Logo' className='mediaocean-logo'></img>
 //                 </div>
 //             </div>
 //         </div>

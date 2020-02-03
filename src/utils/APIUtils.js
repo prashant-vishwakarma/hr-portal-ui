@@ -4,8 +4,11 @@ import {
     API_EXIT_INTERVIEW_ANSWER_URL,
     API_EXIT_INTERVIEW_QUE_URL,
     API_EXIT_INTERVIEW_SUBMIT_URL,
+    API_GET_RESIGNATION_BY_USER_ID_URL,
     API_RESIGN_STATUS_URL,
-    API_RESIGN_URL
+    API_RESIGN_URL,
+    API_URI_SEPARATOR,
+    API_WITHDRAW_RESIGNATION_URL
 } from '../globalConstants';
 import {notification} from "antd";
 import _ from 'lodash';
@@ -13,6 +16,7 @@ import _ from 'lodash';
 const request = (options) => {
     const headers = new Headers({
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
     })
 
     if (localStorage.getItem(ACCESS_TOKEN)) {
@@ -41,39 +45,63 @@ export function login(loginRequest) {
     });
 }
 
-export function signup(signupRequest) {
+export const getResignationByUserId = (userId) => {
     return request({
-        url: API_BASE_URL + "/auth/signup",
+        url: API_GET_RESIGNATION_BY_USER_ID_URL + API_URI_SEPARATOR + userId,
+        method: 'GET'
+    });
+}
+
+
+export const submitResignation = (resignationRequest) => {
+    return request({
+        url: API_RESIGN_URL,
         method: 'POST',
-        body: JSON.stringify(signupRequest)
+        body: JSON.stringify(resignationRequest)
     });
 }
 
-export function checkUsernameAvailability(username) {
+export const withdrawResignationByResignationId = (resignationId) => {
     return request({
-        url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
-        method: 'GET'
+        url: API_WITHDRAW_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
+        method: 'PUT',
+        body: JSON.stringify({status: 'APPROVED'})
     });
 }
 
-export function checkEmailAvailability(email) {
-    return request({
-        url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
-        method: 'GET'
-    });
-}
+// export function signup(signupRequest) {
+//     return request({
+//         url: API_BASE_URL + "/auth/signup",
+//         method: 'POST',
+//         body: JSON.stringify(signupRequest)
+//     });
+// }
+
+// export function checkUsernameAvailability(username) {
+//     return request({
+//         url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
+//         method: 'GET'
+//     });
+// }
 
 
-export function getCurrentUser() {
-    if (!localStorage.getItem(ACCESS_TOKEN)) {
-        return Promise.reject("No access token set.");
-    }
+// export function checkEmailAvailability(email) {
+//     return request({
+//         url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
+//         method: 'GET'
+//     });
+// }
 
-    return request({
-        url: API_BASE_URL + "/user/me",
-        method: 'GET'
-    });
-}
+// export function getCurrentUser() {
+//     if (!localStorage.getItem(ACCESS_TOKEN)) {
+//         return Promise.reject("No access token set.");
+//     }
+//
+//     return request({
+//         url: API_BASE_URL + "/user/me",
+//         method: 'GET'
+//     });
+// }
 
 export function checkPermission(user, permission) {
     let hasPermission = false;
@@ -92,20 +120,11 @@ export function getUserProfile(username) {
     });
 }
 
-export function submitResignation(resignationRequest) {
-    return request({
-        url: API_RESIGN_URL,
-        method: 'POST',
-        body: JSON.stringify(resignationRequest)
-    });
-}
-
-export function checkResigned(user) {
+export function checkResigned() {
     let resigned = false;
-    if (user.status !== 'ACTIVE') {
+    if (JSON.parse(localStorage.getItem('resignationForUser')).resignationId) {
         resigned = true;
     }
-    console.log(resigned)
     return resigned;
 }
 
@@ -153,10 +172,11 @@ export function updateStatus(empId, resignId) {
 }
 
 
-export const openNotificationWithIcon = (type, message, description) => {
+export const openNotificationWithIcon = (type, message, description, duration) => {
     notification[type]({
         message: message,
         description: description,
+        duration: duration ? duration : 3
     });
 }
 
