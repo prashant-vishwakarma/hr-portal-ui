@@ -1,14 +1,7 @@
 import React from 'react';
 import {Form, Input, Popconfirm, Table} from 'antd';
-import {
-    checkPermission,
-    getResignationForAdmin,
-    getResignationForFinance,
-    getResignationForHr,
-    getResignationForMgr,
-    openNotificationWithIcon,
-    updateResignationStatus
-} from "../utils/APIUtils";
+import {checkPermission, getResignationForMgr, openNotificationWithIcon, updateResignationStatus} from "../utils/APIUtils";
+import {ROLE_MANAGER_IN} from "../globalConstants";
 
 const EditableContext = React.createContext();
 
@@ -27,7 +20,7 @@ class EditableCell extends React.Component {
 
     toggleEdit = () => {
         const editing = !this.state.editing;
-        this.setState({editing}, () => {
+        this.setState({editing: editing}, () => {
             if (editing) {
                 this.input.focus();
             }
@@ -101,12 +94,12 @@ class ManagerPending extends React.Component {
         this.columns = [
             {
                 title: 'Employee Name',
-                dataIndex: 'empName',
+                dataIndex: 'userName',
 
             },
             {
                 title: 'Employee Id',
-                dataIndex: 'empId',
+                dataIndex: 'userId',
             },
             {
                 title: 'Resignation Id',
@@ -118,7 +111,7 @@ class ManagerPending extends React.Component {
             },
             {
                 title: 'Comment',
-                dataIndex: 'comment',
+                dataIndex: 'reason',
                 editable: true,
                 width: '20%',
                 onClick: this.toggleEdit
@@ -156,53 +149,29 @@ class ManagerPending extends React.Component {
 
 
     componentDidMount() {
-        if (checkPermission(this.state.user, 'ROLE_MANAGER')) {
-            getResignationForMgr().then(response => {
+        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
+            getResignationForMgr(this.props.user.mail).then(response => {
                 this.setState({pendingForManager: response});
                 this.setState({dataSource: response});
             }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_ADMIN')) {
-            getResignationForAdmin().then(response => {
-                this.setState({pendingForManager: response});
-                this.setState({dataSource: response});
-            }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_FINANCE')) {
-            getResignationForFinance().then(response => {
-                this.setState({pendingForManager: response});
-                this.setState({dataSource: response});
-            }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_HR')) {
-            getResignationForHr().then(response => {
-                this.setState({pendingForManager: response});
-                this.setState({dataSource: response});
-            }).catch(error => {
-
+                openNotificationWithIcon('error', 'Error', 'Could Not Fetch Team', 2);
             });
         }
 
     }
 
-    handleApprove = (key, row) => {
+    handleApprove = (resignationId, row) => {
         const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.key === item.key);
+        const index = newData.findIndex(item => row.userId === item.userId);
         const item = newData[index];
         let request = {
-            resignationId: key,
-            status: 'APPROVE',
-            approverId: this.state.user.id,
-            comment: item.comment
+            resignationId: resignationId,
+            clearanceStatus: 'INPROGRESS',
+            approverId: this.state.user.mail,
+            comment: row.reason
         }
         //console.log(request);
-        if (checkPermission(this.state.user, 'ROLE_MANAGER')) {
+        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
             request.dept = "MANAGER"
             updateResignationStatus(request).then(response => {
                 openNotificationWithIcon("success", "APPROVED Sucessfully")
@@ -210,37 +179,14 @@ class ManagerPending extends React.Component {
 
             });
         }
-        if (checkPermission(this.state.user, 'ROLE_ADMIN')) {
-            request.dept = "ADMIN"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "APPROVED Sucessfully")
-            }).catch(error => {
 
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_FINANCE')) {
-            request.dept = "FINANCE"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "APPROVED Sucessfully")
-            }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_HR')) {
-            request.dept = "HR"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "APPROVED Sucessfully")
-            }).catch(error => {
-
-            });
-        }
         const dataSource = [...this.state.dataSource];
-        this.setState({dataSource: dataSource.filter(item => item.key !== key)});
+        this.setState({dataSource: dataSource.filter(item => item.resignationId !== resignationId)});
     };
 
     handleReject = (key, row) => {
         const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.key === item.key);
+        const index = newData.findIndex(item => row.userId === item.userId);
         const item = newData[index];
         let request = {
             resignationId: key,
@@ -288,7 +234,7 @@ class ManagerPending extends React.Component {
 
     handleSave = row => {
         const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.key === item.key);
+        const index = newData.findIndex(item => row.userId === item.userId);
         const item = newData[index];
         newData.splice(index, 1, {
             ...item,

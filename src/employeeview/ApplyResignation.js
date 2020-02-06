@@ -35,6 +35,7 @@ const ApplyResignation = (props) => {
         let releaseDate = date.add(2, 'M').toISOString();
         const resignRequest = {
             userId: props.user.mail,
+            managerId: props.user.manager.mail,
             reason: resignComment,
             applicationDate: dateNow,
             releaseDate: releaseDate,

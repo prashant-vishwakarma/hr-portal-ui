@@ -3,7 +3,8 @@ import {
     API_BASE_URL,
     API_EXIT_INTERVIEW_ANSWER_URL,
     API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL,
-    API_EXIT_INTERVIEW_SUBMIT_URL,
+    API_EXIT_INTERVIEW_SUBMIT_URL, API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL,
+    API_GET_MANAGER_PENDING_URL,
     API_GET_RESIGNATION_BY_USER_ID_URL,
     API_LOGIN_URI,
     API_RESIGN_STATUS_URL,
@@ -137,9 +138,9 @@ export function checkResigned() {
     return resigned;
 }
 
-export function getResignationForMgr() {
+export function getResignationForMgr(managerId) {
     return request({
-        url: API_RESIGN_STATUS_URL + "/getresignationformgr",
+        url: API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL + API_URI_SEPARATOR + managerId,
         method: 'GET'
     });
 }
