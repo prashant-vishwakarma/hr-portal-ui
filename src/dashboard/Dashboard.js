@@ -12,6 +12,18 @@ import FeedbackForm from '../employeeview/FeedbackForm';
 import {ACCESS_TOKEN} from '../globalConstants';
 import {checkPermission, checkResigned} from "../utils/APIUtils";
 import logo from '../login/logo.svg';
+import HRPending from "../hrview/HRPending";
+import HRApproved from "../hrview/HRApproved";
+import HRRejected from "../hrview/HRRejected";
+import AdminPending from "../adminview/AdminPending";
+import AdminApproved from "../adminview/AdminApproved";
+import AdminRejected from "../adminview/AdminRejected";
+import FinancePending from "../financeview/FinancePending";
+import FinanceApproved from "../financeview/FinanceApproved";
+import FinanceRejected from "../financeview/FinanceRejected";
+import ITPending from "../itview/ITPending";
+import ITApproved from "../itview/ITApproved";
+import ITRejected from "../itview/ITRejected";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -106,16 +118,13 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="5"><Link to="/awaitingMe">Pending Approval</Link></Menu.Item>
-                                    <Menu.Item key="6"><Link to="/approved">Approved Requests</Link></Menu.Item>
-                                    <Menu.Item key="7"><Link to="/rejected">Rejected Resignations</Link></Menu.Item>
+                                    <Menu.Item key="5"><Link to="/managerawaiting">Pending Approval</Link></Menu.Item>
+                                    <Menu.Item key="6"><Link to="/managerapproved">Approved Requests</Link></Menu.Item>
+                                    <Menu.Item key="7"><Link to="/managerrejected">Rejected Resignations</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub3"
-                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
-                                        checkPermission(this.state.user, 'IN_ADMIN') ||
-                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
-                                    }
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
@@ -123,16 +132,13 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="8"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="9"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="10"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="8"><Link to="/hrawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="9"><Link to="/hrapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="10"><Link to="/hrrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub4"
-                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
-                                        checkPermission(this.state.user, 'IN_ADMIN') ||
-                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
-                                    }
+                                    hidden={!(checkPermission(this.state.user, 'IN_ADMIN'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
@@ -140,16 +146,13 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="11"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="12"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="13"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="11"><Link to="/adminawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="12"><Link to="/adminapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="13"><Link to="/adminrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub5"
-                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
-                                        checkPermission(this.state.user, 'IN_ADMIN') ||
-                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
-                                    }
+                                    hidden={!(checkPermission(this.state.user, 'IN_FINANCE'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
@@ -157,15 +160,13 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="14"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="15"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="16"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="14"><Link to="/financeawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="15"><Link to="/financeapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="16"><Link to="/financerejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub6"
-                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
-                                        checkPermission(this.state.user, 'IN_ADMIN') ||
-                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
+                                    hidden={!(checkPermission(this.state.user, 'IN_IT'))
                                     }
                                     title={
                                         <span>
@@ -174,9 +175,9 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="17"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="18"><Link to="/approved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="19"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="17"><Link to="/itawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="18"><Link to="/itapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="19"><Link to="/itrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <Menu.Item key="20">
                                     <Icon type="file"/>
@@ -224,15 +225,56 @@ export default class Dashboard extends React.Component {
                                         <Route exact path="/resignationStatus" render={(props) => (
                                             <ResignationStatus user={this.state.user}/>
                                         )}/>
-                                        <Route exact path="/awaitingMe" render={(props) => (
+                                        <Route exact path="/managerawaiting" render={(props) => (
                                             <ManagerPending user={this.state.user}/>
                                         )}/>
-                                        <Route exact path="/approved" render={(props) => (
+                                        <Route exact path="/managerapproved" render={(props) => (
                                             <ManagerApproved user={this.state.user}/>
                                         )}/>
-                                        <Route exact path="/rejected" render={(props) => (
+                                        <Route exact path="/managerrejected" render={(props) => (
                                             <ManagerRejected user={this.state.user}/>
                                         )}/>
+
+                                        <Route exact path="/hrawaiting" render={(props) => (
+                                            <HRPending user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/hrapproved" render={(props) => (
+                                            <HRApproved user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/hrrejected" render={(props) => (
+                                            <HRRejected user={this.state.user}/>
+                                        )}/>
+
+                                        <Route exact path="/adminawaiting" render={(props) => (
+                                            <AdminPending user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/adminapproved" render={(props) => (
+                                            <AdminApproved user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/adminrejected" render={(props) => (
+                                            <AdminRejected user={this.state.user}/>
+                                        )}/>
+
+                                        <Route exact path="/financeawaiting" render={(props) => (
+                                            <FinancePending user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/financeapproved" render={(props) => (
+                                            <FinanceApproved user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/financerejected" render={(props) => (
+                                            <FinanceRejected user={this.state.user}/>
+                                        )}/>
+
+                                        <Route exact path="/itawaiting" render={(props) => (
+                                            <ITPending user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/itapproved" render={(props) => (
+                                            <ITApproved user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/itrejected" render={(props) => (
+                                            <ITRejected user={this.state.user}/>
+                                        )}/>
+
                                         <Route exact path="/exitform" render={(props) => (
                                             <FeedbackForm user={this.state.user}/>
                                         )}/>
