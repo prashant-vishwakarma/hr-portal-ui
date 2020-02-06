@@ -60,7 +60,7 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <Router>
-                <Layout style={{minHeight: '100vh'}}>
+                <Layout style={{height: '100vh', position: 'fixed', width: '100vw'}}>
                     <Header>
                         <Row theme='dark' type="flex" justify="start">
                             <Col align='left' span={8}><img src={logo} height='100px'/></Col>
@@ -93,8 +93,8 @@ export default class Dashboard extends React.Component {
                                 >
                                     <Menu.Item key="1"><Link to="/">My Details</Link></Menu.Item>
                                     <Menu.Item key="2"><Link to="/applyResignation">Resignation</Link></Menu.Item>
-                                    <Menu.Item key="3" disabled={!checkResigned()}><Link to="/resignationStatus">Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="4" disabled={!checkResigned()}><Link to="/exitform">Exit Interview</Link></Menu.Item>
+                                    <Menu.Item key="3" disabled={checkResigned()}><Link to="/resignationStatus">Resignation Status</Link></Menu.Item>
+                                    <Menu.Item key="4" disabled={checkResigned()}><Link to="/exitform">Exit Interview</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub2"
@@ -119,7 +119,7 @@ export default class Dashboard extends React.Component {
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>Department Approval</span>
+                                        <span>HR Department</span>
                                     </span>
                                     }
                                 >
@@ -127,12 +127,63 @@ export default class Dashboard extends React.Component {
                                     <Menu.Item key="9"><Link to="/approved">Approved Resignation</Link></Menu.Item>
                                     <Menu.Item key="10"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
-                                <Menu.Item key="11">
+                                <SubMenu
+                                    key="sub4"
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
+                                        checkPermission(this.state.user, 'IN_ADMIN') ||
+                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
+                                    }
+                                    title={
+                                        <span>
+                                        <Icon type="team"/>
+                                        <span>Admin Department</span>
+                                    </span>
+                                    }
+                                >
+                                    <Menu.Item key="11"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="12"><Link to="/approved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="13"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                </SubMenu>
+                                <SubMenu
+                                    key="sub5"
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
+                                        checkPermission(this.state.user, 'IN_ADMIN') ||
+                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
+                                    }
+                                    title={
+                                        <span>
+                                        <Icon type="team"/>
+                                        <span>Finance Department</span>
+                                    </span>
+                                    }
+                                >
+                                    <Menu.Item key="14"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="15"><Link to="/approved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="16"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                </SubMenu>
+                                <SubMenu
+                                    key="sub6"
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
+                                        checkPermission(this.state.user, 'IN_ADMIN') ||
+                                        checkPermission(this.state.user, 'IN_FINANCE') || checkPermission(this.state.user, 'IN_IT'))
+                                    }
+                                    title={
+                                        <span>
+                                        <Icon type="team"/>
+                                        <span>IT Department</span>
+                                    </span>
+                                    }
+                                >
+                                    <Menu.Item key="17"><Link to="/awaitingMe">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="18"><Link to="/approved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="19"><Link to="/rejected">Rejected Resignation</Link></Menu.Item>
+                                </SubMenu>
+                                <Menu.Item key="20">
                                     <Icon type="file"/>
                                     <span>File</span>
                                 </Menu.Item>
                                 <SubMenu
-                                    key="sub4"
+                                    key="sub7"
                                     hidden={!(checkPermission(this.state.user, 'IN_HR') ||
                                         checkPermission(this.state.user, 'IN_ADMIN') ||
                                         checkPermission(this.state.user, 'IN_FINANCE'))
@@ -144,9 +195,9 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="12"><Link> Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="13"><Link>Resignation Analysis</Link></Menu.Item>
-                                    <Menu.Item key="14"><Link>Release Experience Letter</Link></Menu.Item>
+                                    <Menu.Item key="21"><Link> Resignation Status</Link></Menu.Item>
+                                    <Menu.Item key="22"><Link>Resignation Analysis</Link></Menu.Item>
+                                    <Menu.Item key="23"><Link>Release Experience Letter</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Sider>

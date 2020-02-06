@@ -9,7 +9,8 @@ import {
     API_RESIGN_STATUS_URL,
     API_RESIGN_URL,
     API_URI_SEPARATOR,
-    API_WITHDRAW_RESIGNATION_URL
+    API_WITHDRAW_RESIGNATION_URL,
+    USER_RESIGNATION_STATUS
 } from '../globalConstants';
 import {notification} from "antd";
 import _ from 'lodash';
@@ -66,7 +67,7 @@ export const withdrawResignationByResignationId = (resignationId) => {
     return request({
         url: API_WITHDRAW_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
         method: 'PUT',
-        body: JSON.stringify({status: 'APPROVED'})
+        body: JSON.stringify({status: 'WITHDRAW'})
     });
 }
 
@@ -130,7 +131,7 @@ export function getUserProfile(username) {
 
 export function checkResigned() {
     let resigned = false;
-    if (JSON.parse(localStorage.getItem('resignationForUser')).resignationId) {
+    if (JSON.parse(localStorage.getItem(USER_RESIGNATION_STATUS)).hasOwnProperty('resignationId')) {
         resigned = true;
     }
     return resigned;

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {Button, Descriptions, Input, Popconfirm, Spin, Typography} from 'antd';
 import {getResignationByUserId, openNotificationWithIcon, submitResignation, withdrawResignationByResignationId} from "../utils/APIUtils";
 import moment from "moment";
+import {RESIGNATION_ID, USER_RESIGNATION_STATUS} from "../globalConstants";
 
 const {TextArea} = Input;
 const {Paragraph} = Typography;
@@ -11,13 +12,17 @@ const ApplyResignation = (props) => {
     let manager = props.user.manager;
     const [loading, setLoading] = React.useState(false);
     const [resignComment, setResignComment] = React.useState('');
-    const [submittedResign, setSubmittedResign] = React.useState('');
+    const [submittedResign, setSubmittedResign] = React.useState(true);
     useEffect(() => {
         getResignationByUserId(props.user.mail).then(response => {
-            if (response.resignationId) {
-                setSubmittedResign(response);
+            if (response.resignationId !== null) {
+                setSubmittedResign(true);
                 setResignComment(response.reason);
+                localStorage.setItem(USER_RESIGNATION_STATUS, JSON.stringify(response));
                 openNotificationWithIcon("info", 'Already Submitted Resignation', '');
+            } else {
+                setSubmittedResign(false);
+                localStorage.setItem(USER_RESIGNATION_STATUS, JSON.stringify(response));
             }
         }).catch(error => {
             openNotificationWithIcon("error", 'Error in fetching Resignation', '')
@@ -52,8 +57,9 @@ const ApplyResignation = (props) => {
             }
         }
         submitResignation(resignRequest).then(response => {
-            if (response) {
-                setSubmittedResign(response);
+            if (response.resignationId) {
+                setSubmittedResign(true);
+                localStorage.setItem(USER_RESIGNATION_STATUS, JSON.stringify(response));
                 openNotificationWithIcon('success', 'Resignation Submitted Successfully', '');
             } else {
                 window.location = '/';
@@ -62,17 +68,16 @@ const ApplyResignation = (props) => {
         }).catch(error => {
             setLoading(false);
             openNotificationWithIcon('error', 'Failed to Submit', '');
-
         });
-        console.log(resignRequest);
         setLoading(false);
     };
     const withdrawResignation = () => {
         setLoading(true);
 
-        withdrawResignationByResignationId(submittedResign.resignationId).then(response => {
-            if (response) {
-                window.location = '/';
+        withdrawResignationByResignationId(JSON.parse(localStorage.getItem(USER_RESIGNATION_STATUS))[RESIGNATION_ID]).then(response => {
+            if (response.resignationId === JSON.parse(localStorage.getItem(USER_RESIGNATION_STATUS))[RESIGNATION_ID]) {
+                //window.location = '/';
+                setSubmittedResign(false);
                 openNotificationWithIcon('success', 'Resignation WithDraw Successfully', '');
             } else {
                 window.location = '/';
@@ -87,10 +92,10 @@ const ApplyResignation = (props) => {
         <div>
             <Spin tip="In Progress..." spinning={loading}>
                 <Descriptions bordered title="Employee Resignation Form" column={2}>
-                    <Descriptions.Item label="Name">{loginUser.name}</Descriptions.Item>
-                    <Descriptions.Item label="Employee ID">{loginUser.mail}</Descriptions.Item>
-                    <Descriptions.Item label="Manager Id">{manager.mail}</Descriptions.Item>
-                    <Descriptions.Item label="Manager Name">{manager.name}</Descriptions.Item>
+                    <Descriptions.Item label="Name">{loginUser && loginUser.name !== null ? loginUser.name : 'Could Not Fetch Name'}</Descriptions.Item>
+                    <Descriptions.Item label="Employee ID">{loginUser && loginUser.mail !== null ? loginUser.mail : 'Could Not Fetch Email'}</Descriptions.Item>
+                    <Descriptions.Item label="Manager Id">{manager && manager.mail !== null ? manager.mail : 'Could Not Fetch Manager\'s EmailID'}</Descriptions.Item>
+                    <Descriptions.Item label="Manager Name">{manager && manager.name !== null ? manager.name : 'Could Not Fetch Manager\'s Name'}</Descriptions.Item>
                     <Descriptions.Item label="Resignation Reason: " span={2}>
                         <TextArea
                             placeholder="Please Add Comments Regarding Request"

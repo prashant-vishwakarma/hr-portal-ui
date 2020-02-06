@@ -25,6 +25,40 @@ export const API_URI_SEPARATOR = '/';
 
 export const USER_DATA = 'userData';
 export const ACCESS_TOKEN = 'token';
+export const USER_RESIGNATION_STATUS = 'resignationForUser';
+export const RESIGNATION_ID = 'resignationId'
+
+export const defaultNoManagerPayload =
+    {
+        "dn": null,
+        "password": null,
+        "username": null,
+        "authorities": [],
+        "accountNonExpired": false,
+        "accountNonLocked": false,
+        "credentialsNonExpired": false,
+        "enabled": false,
+        "timeBeforeExpiration": 0,
+        "graceLoginsRemaining": 0,
+        "mail": "nomanager@mediaocean.com",
+        "manager": null,
+        "name": "No Manager",
+        "department": "Global Platforms",
+        "country": "India",
+        "countryCode": "356",
+        "postalCode": null,
+        "description": null,
+        "title": "No Manager",
+        "company": "Product",
+        "sirName": null,
+        "userPrincipalName": "nomanager@mediaocean.com",
+        "state": null,
+        "sAMAccountName": "nomanager",
+        "cn": "No Manager",
+        "streetAddress": null,
+        "city": null,
+        "directReports": []
+    }
 
 
 export default globalConstants;

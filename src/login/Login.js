@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Checkbox, Col, Form, Icon, Input, Row} from 'antd';
 import './Login.css';
 import {getResignationByUserId, login, openNotificationWithIcon} from '../utils/APIUtils';
-import {ACCESS_TOKEN, USER_DATA} from '../globalConstants';
+import {ACCESS_TOKEN, defaultNoManagerPayload, USER_DATA, USER_RESIGNATION_STATUS} from '../globalConstants';
 import logo from './mediaoceanLogo.svg';
 
 const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
@@ -34,9 +34,17 @@ export default class Login extends React.Component {
                                 user.mail = user.userPrincipalName;
                             }
 
+                            if (!user.manager) {
+                                user.manager = defaultNoManagerPayload;
+                            }
+
+                            if (!user.manager.mail) {
+                                user.manager.mail = user.manager.userPrincipalName;
+                            }
+
                             getResignationByUserId(user.mail).then(response => {
                                 if (response.hasOwnProperty('resignationId')) {
-                                    localStorage.setItem('resignationForUser', JSON.stringify(response));
+                                    localStorage.setItem(USER_RESIGNATION_STATUS, JSON.stringify(response));
                                 } else {
                                     openNotificationWithIcon('error', 'Could Not Fetch Status', 'Employee\'s Resignation Status Unknown');
                                 }
