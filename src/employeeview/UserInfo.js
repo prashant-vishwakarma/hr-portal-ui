@@ -1,5 +1,5 @@
 import React from 'react';
-import {Badge, Descriptions } from 'antd';
+import {Badge, Descriptions} from 'antd';
 
 const UserInfo = (props) => {
     let loginUser = props.user;
@@ -13,23 +13,23 @@ const UserInfo = (props) => {
             <Descriptions.Item label="Designation"> {loginUser.title} </Descriptions.Item>
             <Descriptions.Item label="Department"> {loginUser.department} </Descriptions.Item>
             <Descriptions.Item label="Status" span={3}>
-                <Badge status="processing" text={ loginUser.accountNonExpired && 'Active'} />
+                <Badge status="processing" text={loginUser.accountNonExpired && 'Active'}/>
             </Descriptions.Item>
             <Descriptions.Item label="Manager Id">{manager && manager.sAMAccountName}</Descriptions.Item>
             <Descriptions.Item label="Manager Name" span={2}>{manager && manager.name}</Descriptions.Item>
             <Descriptions.Item label="Location Info">
                 Mediaocean Asia Pvt ltd
-                <br />
+                <br/>
                 2nd Floor Tower B,
-                <br />
+                <br/>
                 {loginUser.streetAddress}
-                <br />
+                <br/>
                 {loginUser.city}
-                <br />
+                <br/>
                 {loginUser.state}
-                <br />
+                <br/>
                 {loginUser.country}
-                <br />
+                <br/>
             </Descriptions.Item>
         </Descriptions>
 

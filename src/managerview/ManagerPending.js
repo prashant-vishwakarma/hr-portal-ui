@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form, Input, Popconfirm, Table} from 'antd';
-import {checkPermission, getResignationForMgr, openNotificationWithIcon, updateResignationStatus} from "../utils/APIUtils";
+import {checkPermission, getResignationForMgr, openNotificationWithIcon, rejectResignationByResignationId, updateResignationStatus} from "../utils/APIUtils";
 import {ROLE_MANAGER_IN} from "../globalConstants";
 
 const EditableContext = React.createContext();
@@ -15,7 +15,7 @@ const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
     state = {
-        editing: false,
+        editing: false
     };
 
     toggleEdit = () => {
@@ -121,7 +121,7 @@ class ManagerPending extends React.Component {
                 dataIndex: 'operationreject',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to reject?" onConfirm={() => this.handleReject(record.key, record)}>
+                        <Popconfirm title="Sure to reject?" onConfirm={() => this.handleReject(record)}>
                             <a>Reject</a>
                         </Popconfirm>
                     ) : null,
@@ -131,7 +131,7 @@ class ManagerPending extends React.Component {
                 dataIndex: 'operationapprove',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to Approve?" onConfirm={() => this.handleApprove(record.key, record)}>
+                        <Popconfirm title="Sure to Approve?" onConfirm={() => this.handleApprove(record)}>
                             <a>Approve</a>
                         </Popconfirm>
                     ) : null,
@@ -148,24 +148,31 @@ class ManagerPending extends React.Component {
     }
 
 
-    componentDidMount() {
+    handleReject = (row) => {
+
         if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
-            getResignationForMgr(this.props.user.mail).then(response => {
-                this.setState({pendingForManager: response});
-                this.setState({dataSource: response});
+            rejectResignationByResignationId(row.resignationId).then(() => {
+                this.setState(prevState => {
+                        return ({
+                            datasource: prevState.dataSource.filter(r => r !== row)
+                        });
+                    }, () => openNotificationWithIcon("success", "Rejected Sucessfully", '', 1)
+                );
             }).catch(error => {
-                openNotificationWithIcon('error', 'Error', 'Could Not Fetch Team', 2);
+                openNotificationWithIcon("error", "Failed to Reject", "Call to the Server Failed", 1);
             });
         }
 
-    }
+        //const dataSource = [...this.state.dataSource];
+        //this.setState({dataSource: dataSource.filter(item => item.key !== key)});
+    };
 
-    handleApprove = (resignationId, row) => {
+    handleApprove = (row) => {
         const newData = [...this.state.dataSource];
         const index = newData.findIndex(item => row.userId === item.userId);
         const item = newData[index];
         let request = {
-            resignationId: resignationId,
+            resignationId: row.resignationId,
             clearanceStatus: 'INPROGRESS',
             approverId: this.state.user.mail,
             comment: row.reason
@@ -181,56 +188,20 @@ class ManagerPending extends React.Component {
         }
 
         const dataSource = [...this.state.dataSource];
-        this.setState({dataSource: dataSource.filter(item => item.resignationId !== resignationId)});
+        this.setState({dataSource: dataSource.filter(item => item.resignationId !== row.resignationId)});
     };
 
-    handleReject = (key, row) => {
-        const newData = [...this.state.dataSource];
-        const index = newData.findIndex(item => row.userId === item.userId);
-        const item = newData[index];
-        let request = {
-            resignationId: key,
-            status: 'REJECT',
-            approverId: this.state.user.id,
-            comment: item.comment
-        }
-
-        if (checkPermission(this.state.user, 'ROLE_MANAGER')) {
-            request.dept = "MANAGER"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "Rejected Sucessfully")
+    componentDidMount() {
+        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
+            getResignationForMgr(this.props.user.mail).then(response => {
+                this.setState({pendingForManager: response});
+                this.setState({dataSource: response});
             }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_ADMIN')) {
-            request.dept = "ADMIN"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "Rejected Sucessfully")
-            }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_FINANCE')) {
-            request.dept = "FINANCE"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "Rejected Sucessfully")
-            }).catch(error => {
-
-            });
-        }
-        if (checkPermission(this.state.user, 'ROLE_HR')) {
-            request.dept = "HR"
-            updateResignationStatus(request).then(response => {
-                openNotificationWithIcon("success", "Rejected Sucessfully")
-            }).catch(error => {
-
+                openNotificationWithIcon('error', 'Error', 'Could Not Fetch Team', 2);
             });
         }
 
-        const dataSource = [...this.state.dataSource];
-        this.setState({dataSource: dataSource.filter(item => item.key !== key)});
-    };
+    }
 
     handleSave = row => {
         const newData = [...this.state.dataSource];

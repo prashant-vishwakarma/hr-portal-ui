@@ -17,6 +17,7 @@ export const API_GET_RESIGNATION_BY_USER_ID_URL = 'http://localhost:8080/resign/
 export const API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL = 'http://localhost:8080/resign/resignationForManagerApproval';
 export const API_RESIGN_STATUS_URL = 'http://localhost:8080/resignstatus';
 export const API_WITHDRAW_RESIGNATION_URL = 'http://localhost:8080/resign/withdrawResignation';
+export const API_REJECT_RESIGNATION_URL = 'http://localhost:8080/resign/updateResignation';
 
 export const API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL = 'http://localhost:8080/question/getAllQuestion';
 export const API_EXIT_INTERVIEW_GET_QUESTION_BY_QUESTION_ID_URL = 'http://localhost:8080/question/getQuestionById';

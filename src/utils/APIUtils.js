@@ -6,7 +6,7 @@ import {
     API_EXIT_INTERVIEW_SUBMIT_URL, API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL,
     API_GET_MANAGER_PENDING_URL,
     API_GET_RESIGNATION_BY_USER_ID_URL,
-    API_LOGIN_URI,
+    API_LOGIN_URI, API_REJECT_RESIGNATION_URL,
     API_RESIGN_STATUS_URL,
     API_RESIGN_URL,
     API_URI_SEPARATOR,
@@ -67,6 +67,14 @@ export const submitResignation = (resignationRequest) => {
 export const withdrawResignationByResignationId = (resignationId) => {
     return request({
         url: API_WITHDRAW_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
+        method: 'PUT',
+        body: JSON.stringify({status: 'WITHDRAW'})
+    });
+}
+
+export const rejectResignationByResignationId = (resignationId) => {
+    return request({
+        url: API_REJECT_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
         method: 'PUT',
         body: JSON.stringify({status: 'WITHDRAW'})
     });

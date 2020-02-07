@@ -24,23 +24,26 @@ export default class Login extends React.Component {
                 login(requestBody)
                     .then(response => {
                         if (response) {
-                            localStorage.setItem(ACCESS_TOKEN, response.token);
-                            localStorage.setItem(USER_DATA, JSON.stringify(response));
+                            let payload = response;
                             openNotificationWithIcon('success', 'Login successful', '', 1.5);
-                            let user = response.authentication.principal;
+                            let user = payload.authentication.principal;
                             user.roles = response.roles;
-
                             if (!user.mail) {
+
                                 user.mail = user.userPrincipalName;
                             }
-
                             if (!user.manager) {
+
                                 user.manager = defaultNoManagerPayload;
                             }
-
                             if (!user.manager.mail) {
+
                                 user.manager.mail = user.manager.userPrincipalName;
                             }
+                            payload.authentication.principal = user;
+
+                            localStorage.setItem(ACCESS_TOKEN, payload[ACCESS_TOKEN]);
+                            localStorage.setItem(USER_DATA, JSON.stringify(payload));
 
                             getResignationByUserId(user.mail).then(response => {
                                 if (response.hasOwnProperty('resignationId')) {
