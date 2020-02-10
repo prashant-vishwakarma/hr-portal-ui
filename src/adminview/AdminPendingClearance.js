@@ -2,12 +2,12 @@ import React from 'react';
 import {Badge, Dropdown, Form, Icon, Input, Menu, Popconfirm, Table} from 'antd';
 import {
     checkPermission,
-    getResignationsForManagerClearance,
+    getResignationsForAdminClearance,
     initialApproveResignationByResignationId,
     openNotificationWithIcon,
     rejectResignationByResignationId
 } from "../utils/APIUtils";
-import {ROLE_MANAGER_IN} from "../globalConstants";
+import {ROLE_ADMIN_IN, ROLE_MANAGER_IN} from "../globalConstants";
 
 const EditableContext = React.createContext();
 
@@ -101,7 +101,7 @@ const menu = (
 );
 
 
-class ManagerPendingClearance extends React.Component {
+class AdminPendingClearance extends React.Component {
 
     expandedRowRender = (childData) => {
         const columns = [
@@ -241,26 +241,29 @@ class ManagerPendingClearance extends React.Component {
     };
 
     componentDidMount() {
-        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
-            getResignationsForManagerClearance().then(response => {
+        if (checkPermission(this.state.user, ROLE_ADMIN_IN)) {
+            getResignationsForAdminClearance().then(response => {
                 let data = [];
                 let childData = [];
-                //let index = 0;
                 response.forEach(row => {
                     let body = row.resignationId;
-                    body.managerClearanceId = row.managerClearanceId;
+                    body.adminClearanceId = row.adminClearanceId;
                     data.push(body);
                     childData.push({
-                        key: row.managerClearanceId,
-                        action: 'Handover',
-                        desc: 'Handover of Items'
+                        key: row.adminClearanceId,
+                        action: 'Assets',
+                        desc: 'Other Assets with Employee'
                     });
                     childData.push({
-                        key: row.managerClearanceId,
-                        action: 'License',
-                        desc: 'Revoke Licenses and Access'
-                    })
-                    //index = index + 1;
+                        key: row.adminClearanceId,
+                        action: 'Cab',
+                        desc: 'Recovery Cab Fee'
+                    });
+                    childData.push({
+                        key: row.adminClearanceId,
+                        action: 'Cummins Access',
+                        desc: 'Parking Sticker Log'
+                    });
                 });
                 this.setState({
                     pendingForManager: data,
@@ -323,14 +326,13 @@ class ManagerPendingClearance extends React.Component {
                     expandedRowRender={(record) => {
                         const {childTableData} = this.state;
                         console.log(record);
-                        let d = childTableData.filter(r => r.key === record.managerClearanceId);
+                        let d = childTableData.filter(r => r.key === record.adminClearanceId);
                         return this.expandedRowRender(d);
                     }}
-                    scroll={{y: 600}}
                 />
             </div>
         );
     }
 }
 
-export default ManagerPendingClearance;
+export default AdminPendingClearance;

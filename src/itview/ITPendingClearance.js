@@ -2,12 +2,12 @@ import React from 'react';
 import {Badge, Dropdown, Form, Icon, Input, Menu, Popconfirm, Table} from 'antd';
 import {
     checkPermission,
-    getResignationsForManagerClearance,
+    getResignationsForITClearance,
     initialApproveResignationByResignationId,
     openNotificationWithIcon,
     rejectResignationByResignationId
 } from "../utils/APIUtils";
-import {ROLE_MANAGER_IN} from "../globalConstants";
+import {ROLE_IT_IN, ROLE_MANAGER_IN} from "../globalConstants";
 
 const EditableContext = React.createContext();
 
@@ -101,7 +101,7 @@ const menu = (
 );
 
 
-class ManagerPendingClearance extends React.Component {
+class ITPendingClearance extends React.Component {
 
     expandedRowRender = (childData) => {
         const columns = [
@@ -241,25 +241,25 @@ class ManagerPendingClearance extends React.Component {
     };
 
     componentDidMount() {
-        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
-            getResignationsForManagerClearance().then(response => {
+        if (checkPermission(this.state.user, ROLE_IT_IN)) {
+            getResignationsForITClearance().then(response => {
                 let data = [];
                 let childData = [];
                 //let index = 0;
                 response.forEach(row => {
                     let body = row.resignationId;
-                    body.managerClearanceId = row.managerClearanceId;
+                    body.clearanceId = row.clearanceId;
                     data.push(body);
                     childData.push({
-                        key: row.managerClearanceId,
-                        action: 'Handover',
-                        desc: 'Handover of Items'
+                        key: row.clearanceId,
+                        action: 'JIRA',
+                        desc: 'Revoke JIRA Access'
                     });
                     childData.push({
-                        key: row.managerClearanceId,
-                        action: 'License',
-                        desc: 'Revoke Licenses and Access'
-                    })
+                        key: row.clearanceId,
+                        action: 'Accessories',
+                        desc: 'Recovery of Items'
+                    });
                     //index = index + 1;
                 });
                 this.setState({
@@ -323,7 +323,7 @@ class ManagerPendingClearance extends React.Component {
                     expandedRowRender={(record) => {
                         const {childTableData} = this.state;
                         console.log(record);
-                        let d = childTableData.filter(r => r.key === record.managerClearanceId);
+                        let d = childTableData.filter(r => r.key === record.clearanceId);
                         return this.expandedRowRender(d);
                     }}
                     scroll={{y: 600}}
@@ -333,4 +333,4 @@ class ManagerPendingClearance extends React.Component {
     }
 }
 
-export default ManagerPendingClearance;
+export default ITPendingClearance;

@@ -6,6 +6,10 @@ import {
     API_EXIT_INTERVIEW_SUBMIT_URL,
     API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL,
     API_GET_RESIGNATION_BY_USER_ID_URL,
+    API_GET_RESIGNATIONS_ADMINCLEARANCE_URL,
+    API_GET_RESIGNATIONS_FINANCECLEARANCE_URL,
+    API_GET_RESIGNATIONS_HRCLEARANCE_URL,
+    API_GET_RESIGNATIONS_ITCLEARANCE_URL,
     API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL,
     API_LOGIN_URI,
     API_RESIGN_STATUS_URL,
@@ -100,6 +104,34 @@ export const initialApproveResignationByResignationId = (resignationId) => {
 export const getResignationsForManagerClearance = () => {
     return request({
         url: API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL,
+        method: 'GET'
+    });
+}
+
+export const getResignationsForITClearance = () => {
+    return request({
+        url: API_GET_RESIGNATIONS_ITCLEARANCE_URL,
+        method: 'GET'
+    });
+}
+
+export const getResignationsForAdminClearance = () => {
+    return request({
+        url: API_GET_RESIGNATIONS_ADMINCLEARANCE_URL,
+        method: 'GET'
+    });
+}
+
+export const getResignationsForHRClearance = () => {
+    return request({
+        url: API_GET_RESIGNATIONS_HRCLEARANCE_URL,
+        method: 'GET'
+    });
+}
+
+export const getResignationsForFinanceClearance = () => {
+    return request({
+        url: API_GET_RESIGNATIONS_FINANCECLEARANCE_URL,
         method: 'GET'
     });
 }

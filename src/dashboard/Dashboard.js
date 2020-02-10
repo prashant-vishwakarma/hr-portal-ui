@@ -12,19 +12,19 @@ import FeedbackForm from '../employeeview/FeedbackForm';
 import {ACCESS_TOKEN, APP_URL} from '../globalConstants';
 import {checkPermission, checkResigned} from "../utils/APIUtils";
 import logo from '../login/logo.svg';
-import HRPending from "../hrview/HRPending";
 import HRApproved from "../hrview/HRApproved";
 import HRRejected from "../hrview/HRRejected";
-import AdminPending from "../adminview/AdminPending";
 import AdminApproved from "../adminview/AdminApproved";
 import AdminRejected from "../adminview/AdminRejected";
 import FinancePending from "../financeview/FinancePending";
 import FinanceApproved from "../financeview/FinanceApproved";
 import FinanceRejected from "../financeview/FinanceRejected";
-import ITPending from "../itview/ITPending";
 import ITApproved from "../itview/ITApproved";
 import ITRejected from "../itview/ITRejected";
 import ManagerPendingClearance from "../managerview/ManagerPendingClearance";
+import ITPendingClearance from "../itview/ITPendingClearance";
+import AdminPendingClearance from "../adminview/AdminPendingClearance";
+import HRPendingClearance from "../hrview/HRPendingClearance";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -196,10 +196,7 @@ export default class Dashboard extends React.Component {
                                 </SubMenu>
                                 <SubMenu
                                     key="sub8"
-                                    hidden={!(checkPermission(this.state.user, 'IN_HR') ||
-                                        checkPermission(this.state.user, 'IN_ADMIN') ||
-                                        checkPermission(this.state.user, 'IN_FINANCE'))
-                                    }
+                                    hidden={!(checkPermission(this.state.user, 'IN_HR'))}
                                     title={
                                         <span>
                                         <Icon type="bar-chart"/>
@@ -207,9 +204,8 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="23"><Link> Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="24"><Link>Resignation Analysis</Link></Menu.Item>
-                                    <Menu.Item key="25"><Link>Release Experience Letter</Link></Menu.Item>
+                                    <Menu.Item key="23"><Link to='/analysis'>Analysis</Link></Menu.Item>
+                                    <Menu.Item key="24"><Link to='/releaseLetter'>Release Experience Letter</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Sider>
@@ -257,7 +253,7 @@ export default class Dashboard extends React.Component {
                                         )}/>
 
                                         <Route exact path="/hrawaiting" render={(props) => (
-                                            <HRPending user={this.state.user}/>
+                                            <HRPendingClearance user={this.state.user}/>
                                         )}/>
                                         <Route exact path="/hrapproved" render={(props) => (
                                             <HRApproved user={this.state.user}/>
@@ -267,7 +263,7 @@ export default class Dashboard extends React.Component {
                                         )}/>
 
                                         <Route exact path="/adminawaiting" render={(props) => (
-                                            <AdminPending user={this.state.user}/>
+                                            <AdminPendingClearance user={this.state.user}/>
                                         )}/>
                                         <Route exact path="/adminapproved" render={(props) => (
                                             <AdminApproved user={this.state.user}/>
@@ -287,7 +283,7 @@ export default class Dashboard extends React.Component {
                                         )}/>
 
                                         <Route exact path="/itawaiting" render={(props) => (
-                                            <ITPending user={this.state.user}/>
+                                            <ITPendingClearance user={this.state.user}/>
                                         )}/>
                                         <Route exact path="/itapproved" render={(props) => (
                                             <ITApproved user={this.state.user}/>
