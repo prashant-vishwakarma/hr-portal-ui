@@ -2,6 +2,8 @@ const globalConstants = {
     APP_NAME: 'Employee Exit Portal'
 }
 
+export const APP_URL = 'http://localhost:3000';
+
 export const API_BASE_URL = 'http://localhost:8080';
 export const SIGNUP_URI = 'auth/signup';
 export const API_LOGIN_URI = 'http://localhost:8080/auth/login';
@@ -17,7 +19,14 @@ export const API_GET_RESIGNATION_BY_USER_ID_URL = 'http://localhost:8080/resign/
 export const API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL = 'http://localhost:8080/resign/resignationForManagerApproval';
 export const API_RESIGN_STATUS_URL = 'http://localhost:8080/resignstatus';
 export const API_WITHDRAW_RESIGNATION_URL = 'http://localhost:8080/resign/withdrawResignation';
-export const API_REJECT_RESIGNATION_URL = 'http://localhost:8080/resign/updateResignation';
+export const API_UPDATE_RESIGNATION_URL = 'http://localhost:8080/resign/updateResignation';
+
+export const API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL = 'http://localhost:8080/managerClearance/pendingForManagerApproval';
+export const API_GET_RESIGNATIONS_ITCLEARANCE_URL = 'http://localhost:8080/itClearance/pendingForItApproval';
+export const API_GET_RESIGNATIONS_HRCLEARANCE_URL = 'http://localhost:8080/hrClearance/pendingForHrApproval';
+export const API_GET_RESIGNATIONS_FINANCECLEARANCE_URL = 'http://localhost:8080/financeClearance/pendingForFinanceApproval';
+export const API_GET_RESIGNATIONS_ADMINCLEARANCE_URL = 'http://localhost:8080/adminClearance/pendingForAdminApproval';
+
 
 export const API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL = 'http://localhost:8080/question/getAllQuestion';
 export const API_EXIT_INTERVIEW_GET_QUESTION_BY_QUESTION_ID_URL = 'http://localhost:8080/question/getQuestionById';

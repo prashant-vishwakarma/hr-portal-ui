@@ -32,7 +32,9 @@ const ApplyResignation = (props) => {
         setLoading(true);
         let date = moment();
         let dateNow = date.toISOString();
-        let releaseDate = date.add(2, 'M').toISOString();
+        //let releaseDate = date.add(2, 'M').toISOString();
+        let releaseDate = date.add(2, "d").toISOString();
+
         const resignRequest = {
             userId: props.user.mail,
             managerId: props.user.manager.mail,

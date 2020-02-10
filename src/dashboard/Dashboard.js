@@ -9,7 +9,7 @@ import ManagerApproved from "../managerview/ManagerApproved";
 import ManagerRejected from "../managerview/ManagerRejected";
 import PageNotFound from "../PageNotFound";
 import FeedbackForm from '../employeeview/FeedbackForm';
-import {ACCESS_TOKEN} from '../globalConstants';
+import {ACCESS_TOKEN, APP_URL} from '../globalConstants';
 import {checkPermission, checkResigned} from "../utils/APIUtils";
 import logo from '../login/logo.svg';
 import HRPending from "../hrview/HRPending";
@@ -24,6 +24,7 @@ import FinanceRejected from "../financeview/FinanceRejected";
 import ITPending from "../itview/ITPending";
 import ITApproved from "../itview/ITApproved";
 import ITRejected from "../itview/ITRejected";
+import ManagerPendingClearance from "../managerview/ManagerPendingClearance";
 
 const {Header, Content, Footer, Sider} = Layout;
 const {SubMenu} = Menu;
@@ -83,7 +84,7 @@ export default class Dashboard extends React.Component {
                                             overlay={this.menu}
                                             icon={<Icon type="user"/>}
                                             style={{marginLeft: 16, verticalAlign: 'middle'}}>
-                                            <div onClick={() => window.open("http://localhost:3000", "_self")}>{this.state.user.name}</div>
+                                            <div onClick={() => window.open(APP_URL, "_self")}>{this.state.user.name}</div>
                                         </Dropdown.Button>
                                     </div>
                                 </div>
@@ -124,67 +125,77 @@ export default class Dashboard extends React.Component {
                                 </SubMenu>
                                 <SubMenu
                                     key="sub3"
+                                    hidden={!checkPermission(this.state.user, 'IN_MANAGER')}
+                                    title={
+                                        <span>
+                                        <Icon type="team"/>
+                                        <span>Manager Clearance</span>
+                                    </span>
+                                    }
+                                >
+                                    <Menu.Item key="8"><Link to="/managerclearanceawaiting">Pending Approval</Link></Menu.Item>
+                                    <Menu.Item key="9"><Link to="/managerclearanceapproved">Approved Requests</Link></Menu.Item>
+                                    <Menu.Item key="10"><Link to="/managerclearancerejected">Rejected Resignations</Link></Menu.Item>
+                                </SubMenu>
+                                <SubMenu
+                                    key="sub4"
                                     hidden={!(checkPermission(this.state.user, 'IN_HR'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>HR Department</span>
+                                        <span>HR Clearance</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="8"><Link to="/hrawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="9"><Link to="/hrapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="10"><Link to="/hrrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="11"><Link to="/hrawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="12"><Link to="/hrapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="13"><Link to="/hrrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
-                                    key="sub4"
+                                    key="sub5"
                                     hidden={!(checkPermission(this.state.user, 'IN_ADMIN'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>Admin Department</span>
+                                        <span>Admin Clearance</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="11"><Link to="/adminawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="12"><Link to="/adminapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="13"><Link to="/adminrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="14"><Link to="/adminawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="15"><Link to="/adminapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="16"><Link to="/adminrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
-                                    key="sub5"
+                                    key="sub6"
                                     hidden={!(checkPermission(this.state.user, 'IN_FINANCE'))}
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>Finance Department</span>
+                                        <span>Finance Clearance</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="14"><Link to="/financeawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="15"><Link to="/financeapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="16"><Link to="/financerejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="17"><Link to="/financeawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="18"><Link to="/financeapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="19"><Link to="/financerejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
-                                    key="sub6"
+                                    key="sub7"
                                     hidden={!(checkPermission(this.state.user, 'IN_IT'))
                                     }
                                     title={
                                         <span>
                                         <Icon type="team"/>
-                                        <span>IT Department</span>
+                                        <span>IT Clearance</span>
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="17"><Link to="/itawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="18"><Link to="/itapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="19"><Link to="/itrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="20"><Link to="/itawaiting">Awaiting Approval</Link></Menu.Item>
+                                    <Menu.Item key="21"><Link to="/itapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="22"><Link to="/itrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
-                                <Menu.Item key="20">
-                                    <Icon type="file"/>
-                                    <span>File</span>
-                                </Menu.Item>
                                 <SubMenu
-                                    key="sub7"
+                                    key="sub8"
                                     hidden={!(checkPermission(this.state.user, 'IN_HR') ||
                                         checkPermission(this.state.user, 'IN_ADMIN') ||
                                         checkPermission(this.state.user, 'IN_FINANCE'))
@@ -196,9 +207,9 @@ export default class Dashboard extends React.Component {
                                     </span>
                                     }
                                 >
-                                    <Menu.Item key="21"><Link> Resignation Status</Link></Menu.Item>
-                                    <Menu.Item key="22"><Link>Resignation Analysis</Link></Menu.Item>
-                                    <Menu.Item key="23"><Link>Release Experience Letter</Link></Menu.Item>
+                                    <Menu.Item key="23"><Link> Resignation Status</Link></Menu.Item>
+                                    <Menu.Item key="24"><Link>Resignation Analysis</Link></Menu.Item>
+                                    <Menu.Item key="25"><Link>Release Experience Letter</Link></Menu.Item>
                                 </SubMenu>
                             </Menu>
                         </Sider>
@@ -233,6 +244,16 @@ export default class Dashboard extends React.Component {
                                         )}/>
                                         <Route exact path="/managerrejected" render={(props) => (
                                             <ManagerRejected user={this.state.user}/>
+                                        )}/>
+
+                                        <Route exact path="/managerclearanceawaiting" render={(props) => (
+                                            <ManagerPendingClearance user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/managerclearanceapproved" render={(props) => (
+                                            <PageNotFound user={this.state.user}/>
+                                        )}/>
+                                        <Route exact path="/managerclearancerejected" render={(props) => (
+                                            <PageNotFound user={this.state.user}/>
                                         )}/>
 
                                         <Route exact path="/hrawaiting" render={(props) => (

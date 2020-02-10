@@ -3,12 +3,14 @@ import {
     API_BASE_URL,
     API_EXIT_INTERVIEW_ANSWER_URL,
     API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL,
-    API_EXIT_INTERVIEW_SUBMIT_URL, API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL,
-    API_GET_MANAGER_PENDING_URL,
+    API_EXIT_INTERVIEW_SUBMIT_URL,
+    API_GET_MANAGER_PENDING_BY_MANAGER_ID_URL,
     API_GET_RESIGNATION_BY_USER_ID_URL,
-    API_LOGIN_URI, API_REJECT_RESIGNATION_URL,
+    API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL,
+    API_LOGIN_URI,
     API_RESIGN_STATUS_URL,
     API_RESIGN_URL,
+    API_UPDATE_RESIGNATION_URL,
     API_URI_SEPARATOR,
     API_WITHDRAW_RESIGNATION_URL,
     USER_RESIGNATION_STATUS
@@ -74,7 +76,7 @@ export const withdrawResignationByResignationId = (resignationId) => {
 
 export const rejectResignationByResignationId = (resignationId) => {
     return request({
-        url: API_REJECT_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
+        url: API_UPDATE_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
         method: 'PUT',
         body: JSON.stringify({status: 'WITHDRAW'})
     });
@@ -83,6 +85,21 @@ export const rejectResignationByResignationId = (resignationId) => {
 export const getAllExitInterviewQuestions = () => {
     return request({
         url: API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL,
+        method: 'GET'
+    });
+}
+
+export const initialApproveResignationByResignationId = (resignationId) => {
+    return request({
+        url: API_UPDATE_RESIGNATION_URL + API_URI_SEPARATOR + resignationId,
+        method: 'PUT',
+        body: JSON.stringify({managerApproved: true})
+    });
+}
+
+export const getResignationsForManagerClearance = () => {
+    return request({
+        url: API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL,
         method: 'GET'
     });
 }

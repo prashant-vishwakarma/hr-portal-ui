@@ -1,6 +1,12 @@
 import React from 'react';
-import {Form, Input, Popconfirm, Table} from 'antd';
-import {checkPermission, getResignationForMgr, initialApproveResignationByResignationId, openNotificationWithIcon, rejectResignationByResignationId} from "../utils/APIUtils";
+import {Badge, Dropdown, Form, Icon, Input, Menu, Popconfirm, Table} from 'antd';
+import {
+    checkPermission,
+    getResignationsForManagerClearance,
+    initialApproveResignationByResignationId,
+    openNotificationWithIcon,
+    rejectResignationByResignationId
+} from "../utils/APIUtils";
 import {ROLE_MANAGER_IN} from "../globalConstants";
 
 const EditableContext = React.createContext();
@@ -88,7 +94,59 @@ class EditableCell extends React.Component {
     }
 }
 
-class ManagerPending extends React.Component {
+const menu = (
+    <Menu>
+        <Menu.Item>Mark Pending</Menu.Item>
+    </Menu>
+);
+
+
+class ManagerPendingClearance extends React.Component {
+
+    expandedRowRender = (childData) => {
+        const columns = [
+            {title: 'Action', dataIndex: 'action', key: 'action'},
+            {title: 'Description', dataIndex: 'desc', key: 'desc'},
+            {
+                title: 'Status',
+                key: 'state',
+                render: () => (
+                    <span>
+            <Badge status="error"/>
+            Pending
+          </span>
+                ),
+            },
+            {
+                title: 'Action',
+                dataIndex: 'operation',
+                key: 'operation',
+                render: () => (
+                    <span className="table-operation">
+            <a>Approve</a>
+            <Dropdown overlay={menu}>
+              <a style={{marginLeft: '20px'}}>
+                More <Icon type="down"/>
+              </a>
+            </Dropdown>
+          </span>
+                ),
+            },
+        ];
+
+        //const data = [];
+        // for (let i = 0; i < 3; ++i) {
+        //     data.push({
+        //         key: i,
+        //         date: '2014-12-24 23:12:00',
+        //         name: 'This is production name',
+        //         upgradeNum: 'Upgraded: 56',
+        //     });
+        // }
+
+        return <Table columns={columns} dataSource={childData} pagination={false}/>;
+    };
+
     constructor(props) {
         super(props);
         this.columns = [
@@ -140,6 +198,7 @@ class ManagerPending extends React.Component {
 
         this.state = {
             dataSource: [],
+            childTableData: [],
             count: 2,
             user: this.props.user,
             pendingForManager: {}
@@ -183,9 +242,33 @@ class ManagerPending extends React.Component {
 
     componentDidMount() {
         if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
-            getResignationForMgr(this.props.user.mail).then(response => {
-                this.setState({pendingForManager: response});
-                this.setState({dataSource: response});
+            getResignationsForManagerClearance().then(response => {
+                let data = [];
+                let childData = [];
+                //let index = 0;
+                response.forEach(row => {
+                    let body = row.resignationId;
+                    body.managerClearanceId = row.managerClearanceId;
+                    data.push(body);
+                    childData.push({
+                        key: row.managerClearanceId,
+                        action: 'Handover',
+                        desc: 'Handover of Items'
+                    });
+                    childData.push({
+                        key: row.managerClearanceId,
+                        action: 'License',
+                        desc: 'Revoke Licenses and Access'
+                    })
+                    //index = index + 1;
+                });
+                this.setState({
+                    pendingForManager: data,
+                    dataSource: data,
+                    childTableData: childData
+                });
+                //this.setState({dataSource: data});
+
             }).catch(error => {
                 openNotificationWithIcon('error', 'Error', 'Could Not Fetch Team', 2);
             });
@@ -231,15 +314,22 @@ class ManagerPending extends React.Component {
         return (
             <div>
                 <Table
+                    className='components-table-demo-nested'
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
                     dataSource={dataSource}
                     columns={columns}
+                    expandedRowRender={(record) => {
+                        const {childTableData} = this.state;
+                        console.log(record);
+                        let d = childTableData.filter(r => r.key === record.managerClearanceId);
+                        return this.expandedRowRender(d);
+                    }}
                 />
             </div>
         );
     }
 }
 
-export default ManagerPending;
+export default ManagerPendingClearance;
