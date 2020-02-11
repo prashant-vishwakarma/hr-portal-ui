@@ -14,6 +14,7 @@ import {
     API_LOGIN_URI,
     API_RESIGN_STATUS_URL,
     API_RESIGN_URL,
+    API_UPDATE_RESIGNATION_MANAGERCLEARANCE_URL,
     API_UPDATE_RESIGNATION_URL,
     API_URI_SEPARATOR,
     API_WITHDRAW_RESIGNATION_URL,
@@ -106,6 +107,15 @@ export const getResignationsForManagerClearance = () => {
         url: API_GET_RESIGNATIONS_MANAGERCLEARANCE_URL,
         method: 'GET'
     });
+}
+
+export const updateResignationForManagerClearance = (clearanceId, body) => {
+    return request({
+        url: API_UPDATE_RESIGNATION_MANAGERCLEARANCE_URL + API_URI_SEPARATOR + clearanceId,
+        method: 'PUT',
+        body: JSON.stringify(body)
+    })
+        ;
 }
 
 export const getResignationsForITClearance = () => {

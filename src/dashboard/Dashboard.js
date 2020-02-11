@@ -120,8 +120,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="5"><Link to="/managerawaiting">Pending Approval</Link></Menu.Item>
-                                    <Menu.Item key="6"><Link to="/managerapproved">Approved Requests</Link></Menu.Item>
-                                    <Menu.Item key="7"><Link to="/managerrejected">Rejected Resignations</Link></Menu.Item>
+                                    <Menu.Item key="6" disabled={true}><Link to="/managerapproved">Approved Requests</Link></Menu.Item>
+                                    <Menu.Item key="7" disabled={true}><Link to="/managerrejected">Rejected Resignations</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub3"
@@ -134,8 +134,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="8"><Link to="/managerclearanceawaiting">Pending Approval</Link></Menu.Item>
-                                    <Menu.Item key="9"><Link to="/managerclearanceapproved">Approved Requests</Link></Menu.Item>
-                                    <Menu.Item key="10"><Link to="/managerclearancerejected">Rejected Resignations</Link></Menu.Item>
+                                    <Menu.Item key="9" disabled={true}><Link to="/managerclearanceapproved">Approved Requests</Link></Menu.Item>
+                                    <Menu.Item key="10" disabled={true}><Link to="/managerclearancerejected">Rejected Resignations</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub4"
@@ -148,8 +148,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="11"><Link to="/hrawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="12"><Link to="/hrapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="13"><Link to="/hrrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="12" disabled={true}><Link to="/hrapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="13" disabled={true}><Link to="/hrrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub5"
@@ -162,8 +162,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="14"><Link to="/adminawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="15"><Link to="/adminapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="16"><Link to="/adminrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="15" disabled={true}><Link to="/adminapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="16" disabled={true}><Link to="/adminrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub6"
@@ -176,8 +176,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="17"><Link to="/financeawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="18"><Link to="/financeapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="19"><Link to="/financerejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="18" disabled={true}><Link to="/financeapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="19" disabled={true}><Link to="/financerejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub7"
@@ -191,8 +191,8 @@ export default class Dashboard extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="20"><Link to="/itawaiting">Awaiting Approval</Link></Menu.Item>
-                                    <Menu.Item key="21"><Link to="/itapproved">Approved Resignation</Link></Menu.Item>
-                                    <Menu.Item key="22"><Link to="/itrejected">Rejected Resignation</Link></Menu.Item>
+                                    <Menu.Item key="21" disabled={true}><Link to="/itapproved">Approved Resignation</Link></Menu.Item>
+                                    <Menu.Item key="22" disabled={true}><Link to="/itrejected">Rejected Resignation</Link></Menu.Item>
                                 </SubMenu>
                                 <SubMenu
                                     key="sub8"

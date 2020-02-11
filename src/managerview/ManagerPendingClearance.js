@@ -1,13 +1,14 @@
 import React from 'react';
-import {Badge, Dropdown, Form, Icon, Input, Menu, Popconfirm, Table} from 'antd';
+import {Form, Input, Menu, Popconfirm, Table} from 'antd';
 import {
     checkPermission,
     getResignationsForManagerClearance,
     initialApproveResignationByResignationId,
     openNotificationWithIcon,
-    rejectResignationByResignationId
+    updateResignationForManagerClearance
 } from "../utils/APIUtils";
 import {ROLE_MANAGER_IN} from "../globalConstants";
+import TextArea from "antd/es/input/TextArea";
 
 const EditableContext = React.createContext();
 
@@ -105,44 +106,41 @@ class ManagerPendingClearance extends React.Component {
 
     expandedRowRender = (childData) => {
         const columns = [
-            {title: 'Action', dataIndex: 'action', key: 'action'},
-            {title: 'Description', dataIndex: 'desc', key: 'desc'},
+            {title: 'Clearance', dataIndex: 'action', key: 'action'},
             {
-                title: 'Status',
-                key: 'state',
-                render: () => (
-                    <span>
-            <Badge status="error"/>
-            Pending
-          </span>
-                ),
+                title: 'Comment',
+                key: 'comment',
+                width: '60%',
+                dataIndex: 'comment',
+                render: (text, record, index) => {
+                    return (
+                        <TextArea placeholder='Clearance Details' defaultValue={text} onChange={
+                            (e) => {
+                                let value = e.target.value;
+
+                                if (index === 0) {
+                                    record.handOverComment = value;
+                                } else if (index === 1) {
+                                    record.licenceRevokeComment = value;
+                                } else if (index === 2) {
+                                    record.noticePeriodPayoutRecoveryComment = value;
+                                }
+                            }
+                        }>
+                        </TextArea>);
+                },
             },
             {
                 title: 'Action',
                 dataIndex: 'operation',
                 key: 'operation',
-                render: () => (
+                render: (text, record) => (
                     <span className="table-operation">
-            <a>Approve</a>
-            <Dropdown overlay={menu}>
-              <a style={{marginLeft: '20px'}}>
-                More <Icon type="down"/>
-              </a>
-            </Dropdown>
-          </span>
+                        <a onClick={() => this.handleCommentUpdate(record)}>Update</a>
+                    </span>
                 ),
             },
         ];
-
-        //const data = [];
-        // for (let i = 0; i < 3; ++i) {
-        //     data.push({
-        //         key: i,
-        //         date: '2014-12-24 23:12:00',
-        //         name: 'This is production name',
-        //         upgradeNum: 'Upgraded: 56',
-        //     });
-        // }
 
         return <Table columns={columns} dataSource={childData} pagination={false}/>;
     };
@@ -170,23 +168,10 @@ class ManagerPendingClearance extends React.Component {
             {
                 title: 'Reason',
                 dataIndex: 'reason',
-                editable: true,
-                width: '20%',
-                onClick: this.toggleEdit
             },
             {
-                title: 'Reject',
-                dataIndex: 'operationreject',
-                render: (text, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to reject?" onConfirm={() => this.handleReject(record)}>
-                            <a>Reject</a>
-                        </Popconfirm>
-                    ) : null,
-            },
-            {
-                title: 'Approve',
-                dataIndex: 'operationapprove',
+                title: 'Status',
+                dataIndex: 'clearanceStatus',
                 render: (text, record) =>
                     this.state.dataSource.length >= 1 ? (
                         <Popconfirm title="Sure to Approve?" onConfirm={() => this.handleApprove(record)}>
@@ -201,26 +186,22 @@ class ManagerPendingClearance extends React.Component {
             childTableData: [],
             count: 2,
             user: this.props.user,
-            pendingForManager: {}
+            pendingForManager: {},
         };
 
     }
 
     //TODO: handlerApprove and handleReject should take account of error response if any
-    handleReject = (row) => {
-        if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
-            rejectResignationByResignationId(row.resignationId).then(() => {
-                this.setState(prevState => {
-                        return ({
-                            dataSource: prevState.dataSource.filter(r => r !== row)
-                        });
-                    }, () => openNotificationWithIcon("success", "Rejected Sucessfully", '', 0.4)
-                );
-            }).catch(error => {
-                openNotificationWithIcon("error", "Failed to Reject", "Call to the Server Failed", 1);
-            });
-        }
-    };
+    handleCommentUpdate = (record) => {
+        console.log('Handle Called for ', record);
+        let body = record;
+        let clearanceId = body.key;
+        delete body.key;
+        delete body.comment;
+        delete body.action;
+        updateResignationForManagerClearance(clearanceId, body).then(response => console.log('response'));
+    }
+
 
     handleApprove = (row) => {
         if (checkPermission(this.state.user, ROLE_MANAGER_IN)) {
@@ -253,12 +234,17 @@ class ManagerPendingClearance extends React.Component {
                     childData.push({
                         key: row.managerClearanceId,
                         action: 'Handover',
-                        desc: 'Handover of Items'
+                        comment: row['handOverComment']
                     });
                     childData.push({
                         key: row.managerClearanceId,
-                        action: 'License',
-                        desc: 'Revoke Licenses and Access'
+                        action: 'License Revoke',
+                        comment: row['licenceRevokeComment']
+                    })
+                    childData.push({
+                        key: row.managerClearanceId,
+                        action: 'Notice Period Payout Recovery',
+                        comment: row['noticePeriodPayoutRecoveryComment']
                     })
                     //index = index + 1;
                 });
@@ -326,7 +312,8 @@ class ManagerPendingClearance extends React.Component {
                         let d = childTableData.filter(r => r.key === record.managerClearanceId);
                         return this.expandedRowRender(d);
                     }}
-                    scroll={{y: 600}}
+                    scroll={{y: 500}}
+                    expandRowByClick={true}
                 />
             </div>
         );

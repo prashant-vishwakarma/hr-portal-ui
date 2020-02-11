@@ -27,6 +27,8 @@ export const API_GET_RESIGNATIONS_HRCLEARANCE_URL = 'http://localhost:8080/hrCle
 export const API_GET_RESIGNATIONS_FINANCECLEARANCE_URL = 'http://localhost:8080/financeClearance/pendingForFinanceApproval';
 export const API_GET_RESIGNATIONS_ADMINCLEARANCE_URL = 'http://localhost:8080/adminClearance/pendingForAdminApproval';
 
+export const API_UPDATE_RESIGNATION_MANAGERCLEARANCE_URL = 'http://localhost:8080/managerClearance/update';
+
 
 export const API_EXIT_INTERVIEW_GET_ALL_QUESTIONS_URL = 'http://localhost:8080/question/getAllQuestion';
 export const API_EXIT_INTERVIEW_GET_QUESTION_BY_QUESTION_ID_URL = 'http://localhost:8080/question/getQuestionById';

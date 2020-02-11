@@ -236,6 +236,7 @@ class ManagerPending extends React.Component {
                     bordered
                     dataSource={dataSource}
                     columns={columns}
+                    scroll={{y: 500}}
                 />
             </div>
         );
